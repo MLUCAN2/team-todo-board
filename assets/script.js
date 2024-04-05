@@ -4,7 +4,7 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 // Todo: create a function to generate a unique task id 
 function generateTaskId() {
-    return nextId++;
+    return Math.floor(Math.random()*10000);
 }
 const taskId=generateTaskId();
 console.log(taskId)
@@ -93,8 +93,8 @@ function handleAddTask(event){
 function handleDeleteTask(){
     console.log ('Delete button clicked')
     const taskId= $(this).attr('data-task-id');
-    console.log (taskID);
-    const taskIndex = taskList.findIndex(task=>task.id === taskId);
+    console.log (taskId);
+    const taskIndex = taskList.findIndex(task => task.id === taskId);
     if (taskIndex !== -1){
         taskList.splice(taskIndex, 1);
         localStorage.setItem('tasks', JSON.stringify(taskList));
@@ -106,7 +106,7 @@ function handleDeleteTask(){
 function handleDrop(event, ui) {
     const taskId= ui.draggable.attr('data-task-id');
     const newStatus= event.target.id;
-    const taskIndex= taskList.findIndex(task => task.id == taskID);
+    const taskIndex= taskList.findIndex(task => task.id == taskId);
     if (taskIndex !== -1){
         taskList[taskIndex].status= newStatus;
 
@@ -121,7 +121,7 @@ $(document).ready(function () {
     taskList=JSON.parse(localStorage.getItem("tasks"));
     nextId =JSON.parse(localStorage.getItem("nextID"));
     if (taskList === null || taskList === undefined){
-        taskList= []
+        taskList= [];
     }
     renderTaskList();
     $('#saveTaskBtn').click(handleAddTask);
@@ -129,5 +129,6 @@ $(document).ready(function () {
         drop: handleDrop
     });
     $('#taskDueDate').datepicker();
+    $('#todo-cards').on('click', '.delete', handleDeleteTask);
 
 });
